@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Archivo de Skylanders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="banner">
+    <div class="chain chain-left"></div>
+    <div class="chain chain-right"></div>
+    <div class="sign">
+      <p class="eyebrow">Crónicas del Portal de los Maestros</p>
+      <h1>El Archivo de Skylanders</h1>
+      <p class="subtitle">Consulta los pergaminos de la Academia — solo lectura</p>
+    </div>
+  </header>
+
+  <nav class="tablets" id="tablets"></nav>
+
+  <main class="scroll-area">
+    <section class="search-bar">
+      <p class="search-label" id="searchLabel">Buscar en el archivo por ID</p>
+      <div class="search-controls">
+        <input type="text" id="searchInput" placeholder="p. ej. 5">
+        <button id="searchBtn" class="seal-btn">
+          <span>Consultar</span>
+        </button>
+        <button id="clearBtn" class="link-btn">Ver todos</button>
+      </div>
+    </section>
+
+    <section id="statusArea" class="status-area" hidden></section>
+
+    <section id="cardGrid" class="card-grid"></section>
+  </main>
+
+  <footer class="footer">
+    <p>Archivo compilado por Guillermo Moreno · Datos servidos desde Supabase</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
