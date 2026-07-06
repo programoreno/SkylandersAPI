@@ -1,0 +1,346 @@
+:root{
+  --piedra-clara: #D2D7DF;
+  --piedra-mediana: #8A95A5;
+  --granito: #4A525A;
+  --roca-oscura: #24282C;
+  --lava: #9E2A2B;
+  --lava-brillante: #E05A47;
+  --oro-antiguo: #9A7B32;
+  --sombra-pesada: rgba(15, 17, 19, 0.6);
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+}
+
+body{
+  /* Efecto sutil de piedra rugosa de fondo */
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05), transparent 80%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 4px),
+    var(--piedra-mediana);
+  background-attachment: fixed;
+  color: var(--roca-oscura);
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Banner Estilo Monolito ---------- */
+.banner{
+  position: relative;
+  display:flex;
+  justify-content:center;
+  padding: 56px 20px 40px;
+  background: linear-gradient(180deg, var(--roca-oscura) 0%, var(--granito) 100%);
+  border-bottom: 8px solid var(--oro-antiguo);
+  box-shadow: 0 10px 20px var(--sombra-pesada);
+}
+
+.sign{
+  background: var(--piedra-clara);
+  border: 4px solid var(--granito);
+  border-radius: 4px;
+  box-shadow: 0 12px 0 rgba(0,0,0,0.4), inset 0 0 15px rgba(0,0,0,0.15);
+  padding: 22px 48px;
+  text-align:center;
+  max-width: 640px;
+  position:relative;
+}
+
+/* Detalles de remaches de hierro a los lados */
+.sign::before, .sign::after{
+  content:"";
+  position:absolute;
+  top:calc(50% - 8px);
+  width:16px;
+  height:16px;
+  background: #333;
+  border-radius:50%;
+  box-shadow: inset -2px -2px 4px rgba(255,255,255,0.2), 2px 2px 4px rgba(0,0,0,0.5);
+}
+.sign::before{ left:-10px; }
+.sign::after{ right:-10px; }
+
+.eyebrow{
+  font-family:'IM Fell English SC', serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: var(--lava);
+  font-weight: bold;
+  margin: 0 0 6px;
+}
+
+.sign h1{
+  font-family:'Cinzel Decorative', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin: 0 0 8px;
+  color: var(--roca-oscura);
+  text-shadow: 1px 1px 0px rgba(255,255,255,0.6);
+}
+
+.subtitle{
+  margin:0;
+  font-style: italic;
+  color: #555;
+}
+
+/* ---------- Bloques de navegación (Piedras rústicas) ---------- */
+.tablets{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content:center;
+  gap: 12px;
+  padding: 20px 16px;
+  background: var(--roca-oscura);
+  box-shadow: inset 0 10px 10px rgba(0,0,0,0.5);
+}
+
+.tablet-btn{
+  font-family:'Cinzel', serif;
+  font-weight:700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--piedra-clara);
+  background: var(--granito);
+  border: 2px solid var(--piedra-mediana);
+  border-radius: 3px;
+  padding: 12px 20px;
+  cursor:pointer;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.4);
+  transition: all 0.1s ease;
+}
+
+.tablet-btn:hover{ 
+  background: #5b656f;
+  color: #fff;
+}
+
+.tablet-btn:focus-visible{
+  outline: 3px solid var(--lava-brillante);
+  outline-offset: 2px;
+}
+
+.tablet-btn.active{
+  background: var(--lava);
+  color: #fff;
+  border-color: var(--lava-brillante);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px transparent;
+}
+
+/* ---------- Área de Monolitos / Tarjetas ---------- */
+.scroll-area{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 20px 60px;
+}
+
+.search-bar{
+  background: #A3ADB9;
+  border: 3px solid var(--granito);
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  border-radius: 4px;
+}
+
+.search-label{
+  font-family:'IM Fell English SC', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  color: var(--roca-oscura);
+  font-weight: bold;
+  margin: 0 0 12px;
+}
+
+.search-controls{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+#searchInput{
+  flex: 1 1 200px;
+  font-family:'EB Garamond', serif;
+  font-size: 1.05rem;
+  padding: 12px;
+  border: 3px solid var(--granito);
+  background: var(--piedra-clara);
+  color: var(--roca-oscura);
+  font-weight: 600;
+}
+
+#searchInput:focus-visible{
+  outline: 3px solid var(--lava-brillante);
+  outline-offset: 1px;
+}
+
+.seal-btn{
+  font-family:'Cinzel', serif;
+  font-weight:700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  background: var(--lava);
+  color: #fff;
+  border: 2px solid var(--lava-brillante);
+  padding: 12px 24px;
+  cursor:pointer;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.seal-btn:active{ 
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 transparent;
+}
+.seal-btn:focus-visible{ outline: 3px solid var(--lava-brillante); outline-offset: 2px; }
+
+.link-btn{
+  background:none;
+  border: none;
+  font-family:'EB Garamond', serif;
+  font-style: italic;
+  font-weight: bold;
+  color: var(--lava);
+  text-decoration: underline;
+  cursor:pointer;
+  font-size: 1rem;
+}
+.link-btn:hover{ color: var(--roca-oscura); }
+
+/* ---------- Estado ---------- */
+.status-area{
+  text-align:center;
+  padding: 30px;
+  font-family:'IM Fell English SC', serif;
+  font-size: 1.2rem;
+  color: var(--roca-oscura);
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
+}
+
+.status-area.error{ color: var(--lava); font-weight: bold; }
+
+/* ---------- Bloques / Tarjetas de Piedra ---------- */
+.card-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.card{
+  background: var(--piedra-clara);
+  border: 3px solid var(--granito);
+  box-shadow: 8px 8px 0px var(--roca-oscura);
+  border-radius: 2px;
+  padding: 20px;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card-id{
+  font-family:'IM Fell English SC', serif;
+  font-size: 0.8rem;
+  color: #555;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 0;
+}
+
+.card-title{
+  font-family:'Cinzel', serif;
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: var(--roca-oscura);
+  margin: 6px 0 14px;
+  border-bottom: 2px dashed var(--granito);
+  padding-bottom: 6px;
+}
+
+/* Sello redondo incrustado */
+.seal{
+  position:absolute;
+  top: -12px;
+  right: -12px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 3px solid var(--roca-oscura);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 1.3rem;
+  box-shadow: 2px 4px 6px rgba(0,0,0,0.4);
+}
+
+.card-meta{
+  font-size: 0.95rem;
+  color: #3d4349;
+  margin: 5px 0;
+}
+
+.card-meta b{ color: var(--roca-oscura); }
+
+.card-quote{
+  font-style: italic;
+  border-left: 4px solid var(--lava);
+  padding-left: 12px;
+  margin: 14px 0;
+  color: #701c1d;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 6px 6px 6px 12px;
+}
+
+.card-desc{
+  font-size: 0.95rem;
+  margin-top: 10px;
+  color: #2b3035;
+}
+
+.card-desc.collapsed{
+  display:-webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow:hidden;
+}
+
+.expand-btn{
+  background:none;
+  border:none;
+  color: var(--lava);
+  font-family:'EB Garamond', serif;
+  font-style: italic;
+  font-weight: bold;
+  cursor:pointer;
+  padding: 6px 0 0 0;
+  font-size: 0.9rem;
+}
+.expand-btn:hover { color: var(--roca-oscura); }
+
+/* ---------- Footer ---------- */
+.footer{
+  text-align:center;
+  font-family:'IM Fell English SC', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: var(--piedra-clara);
+  background: var(--roca-oscura);
+  padding: 24px;
+  border-top: 4px solid var(--granito);
+}
