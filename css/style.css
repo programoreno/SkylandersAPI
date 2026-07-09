@@ -39,10 +39,10 @@ body{
   position: relative;
   display:flex;
   justify-content:center;
-  padding: 56px 20px 40px;
+  padding: 75px 20px 75px;
   background-image: url('../img/rocks.jpg');
-  /*background: linear-gradient(180deg, var(--roca-oscura) 0%, var(--granito) 100%);*/
-  border-bottom: 8px solid var(--oro-antiguo);
+  /*background: linear-gradient(180deg, var(--roca-oscura) 0%, var(--granito) 100%);
+  border-bottom: 8px solid var(--oro-antiguo);*/
   box-shadow: 0 10px 20px var(--sombra-pesada);
 }
 @media (max-width:750px) {
@@ -107,7 +107,7 @@ body{
   flex-wrap: wrap;
   justify-content:center;
   gap: 12px;
-  padding: 20px 16px;
+  padding: 30px 16px;
   background: var(--roca-oscura);
   box-shadow: inset 0 10px 10px rgba(0,0,0,0.5);
 }
