@@ -14,17 +14,17 @@ const HEADERS = {
 
 /* Mapa de elementos de Skylanders -> color y símbolo del sello */
 const ELEMENTOS = {
-  fuego:        { color: "#C0392B", icon: "🔥" },
-  agua:         { color: "#2E86AB", icon: "💧" },
-  aire:         { color: "#AED6F1", icon: "🌪️" },
-  tierra:       { color: "#8B5E34", icon: "⛰️" },
-  vida:         { color: "#4B8B3B", icon: "🌿" },
-  muertos:      { color: "#6C3483", icon: "💀" },
-  magia:        { color: "#A569BD", icon: "✨" },
-  tecnologia:   { color: "#D68910", icon: "⚙️" },
-  tecnología:   { color: "#D68910", icon: "⚙️" },
-  luz:          { color: "#D4AC0D", icon: "☀️" },
-  oscuridad:    { color: "#1C1C1C", icon: "🌑" }
+  fuego:        { color: "#C0392B"},
+  agua:         { color: "#2E86AB"},
+  aire:         { color: "#AED6F1"},
+  tierra:       { color: "#8B5E34"},
+  vida:         { color: "#4B8B3B"},
+  muertos:      { color: "#6C3483"},
+  magia:        { color: "#A569BD"},
+  tecnologia:   { color: "#D68910"},
+  tecnología:   { color: "#D68910"},
+  luz:          { color: "#D4AC0D"},
+  oscuridad:    { color: "#1C1C1C"}
 };
 const ELEMENTO_DEFAULT = { color: "#555555", icon: "🛡️" };
 
@@ -223,9 +223,6 @@ function renderPersonaje(fila) {
   const elementoTexto = nombreElemento ?? fila.elemento ?? "—";
 
   card.innerHTML = `
-    <div class="seal" style="background:${sello.color}" title="Elemento: ${elementoTexto}">
-      <span aria-hidden="true">${sello.icon}</span>
-    </div>
     <p class="card-id">Personaje · ID ${fila.id}</p>
     <h3 class="card-title">${fila.nombre ?? "(sin nombre)"}</h3>
     <p class="card-meta"><b>Elemento:</b> ${elementoTexto}</p>
