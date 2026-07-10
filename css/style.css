@@ -351,3 +351,44 @@ body{
   padding: 24px;
   border-top: 4px solid var(--granito);
 }
+
+/* ----- TEST JSON --------*/
+/* Contenedor principal del JSON */
+.json-pre-container {
+  text-align: left;
+  background-color: #1e1e1e; /* Fondo oscuro tipo editor */
+  color: #abb2bf;           /* Color por defecto para llaves y corchetes [] {} */
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #333;
+}
+
+/* Colores para el resaltado de sintaxis */
+.json-key {
+  color: #e06c75; /* Rojo/Rosado suave para las propiedades/claves */
+  font-weight: bold;
+}
+
+.json-string {
+  color: #98c379; /* Verde para los textos/valores string */
+}
+
+.json-number {
+  color: #d19a66; /* Naranja para los IDs y números */
+}
+
+.json-boolean {
+  color: #56b6c2; /* Cyan para los booleanos (true/false) */
+}
+
+.json-null {
+  color: #7f848e; /* Gris para los campos nulos */
+  font-style: italic;
+}
