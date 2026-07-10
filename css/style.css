@@ -241,11 +241,11 @@ body{
 .status-area.error{ color: var(--lava); font-weight: bold; }
 
 /* ---------- Bloques / Tarjetas de Piedra ---------- */
-.card-grid{
+/*.card-grid{
   display:grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
-}
+}*/
 
 .card{
   background: var(--piedra-clara);
