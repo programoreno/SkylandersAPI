@@ -1,6 +1,6 @@
 /* ============================================================
    Archivo de Skylanders — consumo de la API REST de Supabase
-   Solo lectura (GET). Formato JSON Unificado sin Pestañas.
+   Solo lectura (GET). Formato JSON interactivo por pestañas.
    ============================================================ */
 
 const SUPABASE_URL = "https://wtcdmpgembpkdaigmzmc.supabase.co";
@@ -11,27 +11,62 @@ const HEADERS = {
   Authorization: `Bearer ${API_KEY}`
 };
 
-/* Esquema de las tablas a consultar en Supabase */
-const TABLAS_CONFIG = [
-  { key: "personajes", table: "personaje", select: "*,elemento(nombre),saga(nombre),edicion(nombre),equipo(nombre),habilidad(nombre)", fallbackSelect: "*" },
-  { key: "elementos", table: "elemento", select: "*" },
-  { key: "sagas", table: "saga", select: "*" },
-  { key: "ediciones", table: "edicion", select: "*" },
-  { key: "equipos", table: "equipo", select: "*" },
-  { key: "habilidades", table: "habilidad", select: "*" }
+/* ------------------------------------------------------------
+   Definición de las secciones (pestañas) del archivo
+   ------------------------------------------------------------ */
+const TABS = [
+  {
+    key: "personaje",
+    label: "Personajes",
+    table: "personaje",
+    select: "*,elemento(nombre),saga(nombre),edicion(nombre),equipo(nombre),habilidad(nombre)",
+    fallbackSelect: "*",
+    searchLabel: "Buscar personaje por nombre"
+  },
+  { key: "elemento", label: "Elementos", table: "elemento", select: "*", searchLabel: "Buscar elemento por nombre" },
+  { key: "saga", label: "Sagas", table: "saga", select: "*", searchLabel: "Buscar saga por nombre" },
+  { key: "edicion", label: "Ediciones", table: "edicion", select: "*", searchLabel: "Buscar edición por nombre" },
+  { key: "equipo", label: "Equipos", table: "equipo", select: "*", searchLabel: "Buscar equipo por nombre" },
+  { key: "habilidad", label: "Habilidades", table: "habilidad", select: "*", searchLabel: "Buscar habilidad por nombre" }
 ];
 
-// Almacén global para guardar el JSON completo de la base de datos
-let baseDeDatosJSON = {};
+let currentTab = TABS[0];
 
 /* ------------------------------------------------------------
    Elementos del DOM
    ------------------------------------------------------------ */
+const tabletsEl = document.getElementById("tablets");
+const searchLabelEl = document.getElementById("searchLabel");
 const searchInputEl = document.getElementById("searchInput");
 const searchBtnEl = document.getElementById("searchBtn");
 const clearBtnEl = document.getElementById("clearBtn");
 const statusEl = document.getElementById("statusArea");
-const gridEl = document.getElementById("cardGrid"); // Aquí se pintará el <pre> con el JSON
+const gridEl = document.getElementById("cardGrid"); // Seguirá siendo el contenedor principal
+
+/* ------------------------------------------------------------
+   Construcción de la navegación (Pestañas)
+   ------------------------------------------------------------ */
+function construirTablets() {
+  tabletsEl.innerHTML = "";
+  TABS.forEach(tab => {
+    const btn = document.createElement("button");
+    btn.className = "tablet-btn" + (tab.key === currentTab.key ? " active" : "");
+    btn.textContent = tab.label;
+    btn.addEventListener("click", () => cambiarTab(tab));
+    btn.dataset.key = tab.key;
+    tabletsEl.appendChild(btn);
+  });
+}
+
+function cambiarTab(tab) {
+  currentTab = tab;
+  [...tabletsEl.children].forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.key === tab.key);
+  });
+  searchLabelEl.textContent = tab.searchLabel;
+  searchInputEl.value = "";
+  cargarTodos();
+}
 
 /* ------------------------------------------------------------
    Llamadas a la API (solo GET)
@@ -45,23 +80,33 @@ async function pedirDatos(url) {
   return res.json();
 }
 
-async function cargarTabla(config) {
-  const base = `${SUPABASE_URL}/rest/v1/${config.table}`;
-  const select = config.select || "*";
-  const url = `${base}?select=${encodeURIComponent(select)}`;
+async function cargarTabla(tab, busquedaNombre) {
+  const base = `${SUPABASE_URL}/rest/v1/${tab.table}`;
+  const select = tab.select || "*";
+  const params = new URLSearchParams({ select });
+  
+  if (busquedaNombre) {
+    params.set("nombre", `ilike.*${busquedaNombre}*`);
+  }
+  
+  const url = `${base}?${params.toString()}`;
 
   try {
     return await pedirDatos(url);
   } catch (e) {
-    if (config.fallbackSelect) {
-      return await pedirDatos(`${base}?select=${encodeURIComponent(config.fallbackSelect)}`);
+    if (tab.fallbackSelect) {
+      const paramsPlano = new URLSearchParams({ select: tab.fallbackSelect });
+      if (busquedaNombre) {
+        paramsPlano.set("nombre", `ilike.*${busquedaNombre}*`);
+      }
+      return await pedirDatos(`${base}?${paramsPlano.toString()}`);
     }
     throw e;
   }
 }
 
 /* ------------------------------------------------------------
-   Estados de carga / error
+   Estados de carga / error / vacío
    ------------------------------------------------------------ */
 function mostrarEstado(texto, esError) {
   statusEl.hidden = false;
@@ -75,91 +120,74 @@ function ocultarEstado() {
 }
 
 /* ------------------------------------------------------------
-   Carga Inicial (Descarga todo en paralelo)
+   Carga principal y Búsqueda
    ------------------------------------------------------------ */
-async function cargarTodoElArchivo() {
-  mostrarEstado("Invocando el archivo completo desde los monolitos de Supabase...", false);
+async function cargarTodos() {
+  mostrarEstado("Picando en la roca de las runas...", false);
   try {
-    // Descargamos todas las tablas al mismo tiempo
-    const promesas = TABLAS_CONFIG.map(config => cargarTabla(config));
-    const resultados = await Promise.all(promesas);
-
-    // Construimos el objeto JSON unificado
-    baseDeDatosJSON = {};
-    TABLAS_CONFIG.forEach((config, index) => {
-      baseDeDatosJSON[config.key] = resultados[index];
-    });
-
+    const datos = await cargarTabla(currentTab, null);
     ocultarEstado();
-    mostrarJSON(baseDeDatosJSON);
+    pintarJSON(datos);
   } catch (e) {
-    mostrarEstado(`Error al extraer el archivo JSON: ${e.message}`, true);
+    mostrarEstado(`No se pudieron extraer las runas: ${e.message}`, true);
+  }
+}
+
+async function buscar() {
+  const valor = searchInputEl.value.trim();
+  if (!valor) { cargarTodos(); return; }
+
+  mostrarEstado(`Buscando "${valor}" en los monolitos...`, false);
+  try {
+    const datos = await cargarTabla(currentTab, valor);
+    ocultarEstado();
+    if (!datos.length) {
+      mostrarEstado("Esta roca está lisa: no hay resultados para ese nombre.", false);
+      return;
+    }
+    pintarJSON(datos);
+  } catch (e) {
+    mostrarEstado(`No se pudo completar la excavación: ${e.message}`, true);
   }
 }
 
 /* ------------------------------------------------------------
-   Filtrado e Impresión del JSON
+   Renderizador en formato JSON limpio
    ------------------------------------------------------------ */
-function mostrarJSON(objeto) {
+function pintarJSON(datos) {
   gridEl.innerHTML = "";
-  
-  // Creamos una etiqueta <pre> y <code> para mantener el formateado limpio de JSON
+  if (!datos.length) {
+    mostrarEstado("Esta roca está lisa: la tabla no tiene registros.", false);
+    return;
+  }
+
+  // Creamos la estructura <pre><code> para renderizar el JSON estético en pantalla
   const pre = document.createElement("pre");
   pre.style.textAlign = "left";
   pre.style.background = "#1e1e1e";
   pre.style.color = "#a9dc76";
-  pre.style.padding = "15px";
+  pre.style.padding = "20px";
   pre.style.borderRadius = "8px";
   pre.style.overflowX = "auto";
   pre.style.fontSize = "14px";
+  pre.style.margin = "0";
+  pre.style.width = "100%";
+  pre.style.boxSizing = "border-box";
   
   const code = document.createElement("code");
-  code.textContent = JSON.stringify(objeto, null, 2); // Indentación de 2 espacios
+  code.textContent = JSON.stringify(datos, null, 2); // Formatea con 2 espacios de indentación
   
   pre.appendChild(code);
   gridEl.appendChild(pre);
 }
 
-function buscar() {
-  const termino = searchInputEl.value.trim().toLowerCase();
-  if (!termino) { 
-    mostrarJSON(baseDeDatosJSON); 
-    return; 
-  }
-
-  // Clonamos el objeto para filtrar sin destruir los datos originales
-  const jsonFiltrado = {};
-
-  for (const [tabla, registros] of Object.entries(baseDeDatosJSON)) {
-    // Filtramos cada tabla buscando si el nombre coincide parcialmente con la búsqueda
-    const coincidencias = registros.filter(reg => 
-      reg.nombre && reg.nombre.toLowerCase().includes(termino)
-    );
-    
-    // Solo añadimos la propiedad al JSON de salida si tiene resultados
-    if (coincidencias.length > 0) {
-      jsonFiltrado[tabla] = coincidencias;
-    }
-  }
-
-  if (Object.keys(jsonFiltrado).length === 0) {
-    mostrarEstado(`No se encontraron registros que coincidan con "${termino}"`, false);
-  } else {
-    ocultarEstado();
-    mostrarJSON(jsonFiltrado);
-  }
-}
-
 /* ------------------------------------------------------------
-   Eventos e Inicio
+   Eventos e inicio
    ------------------------------------------------------------ */
 searchBtnEl.addEventListener("click", buscar);
 searchInputEl.addEventListener("keydown", e => { if (e.key === "Enter") buscar(); });
-clearBtnEl.addEventListener("click", () => { searchInputEl.value = ""; ocultarEstado(); mostrarJSON(baseDeDatosJSON); });
+clearBtnEl.addEventListener("click", () => { searchInputEl.value = ""; cargarTodos(); });
 
-// Modificamos el label estático de búsqueda si existe en el DOM
-const searchLabelEl = document.getElementById("searchLabel");
-if (searchLabelEl) searchLabelEl.textContent = "Buscar en todo el archivo (por nombre)";
-
-// Arrancar la descarga
-cargarTodoElArchivo();
+construirTablets();
+searchLabelEl.textContent = currentTab.searchLabel;
+cargarTodos();
