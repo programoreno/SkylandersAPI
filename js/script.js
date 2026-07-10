@@ -124,7 +124,7 @@ function ocultarEstado() {
    Carga principal y Búsqueda
    ------------------------------------------------------------ */
 async function cargarTodos() {
-  mostrarEstado("Picando en la roca de las runas...", false);
+  mostrarEstado("Invocando...", false);
   try {
     const datos = await cargarTabla(currentTab, null);
     ocultarEstado();
@@ -138,7 +138,7 @@ async function buscar() {
   const valor = searchInputEl.value.trim();
   if (!valor) { cargarTodos(); return; }
 
-  mostrarEstado(`Buscando "${valor}" en los monolitos...`, false);
+  mostrarEstado(`Buscando "${valor}" en los archivos...`, false);
   try {
     const datos = await cargarTabla(currentTab, valor);
     ocultarEstado();
@@ -148,7 +148,7 @@ async function buscar() {
     }
     pintarJSON(datos);
   } catch (e) {
-    mostrarEstado(`No se pudo completar la excavación: ${e.message}`, true);
+    mostrarEstado(`No se pudo completar la busqueda: ${e.message}`, true);
   }
 }
 
