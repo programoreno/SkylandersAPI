@@ -143,7 +143,7 @@ async function buscar() {
     const datos = await cargarTabla(currentTab, valor);
     ocultarEstado();
     if (!datos.length) {
-      mostrarEstado("Esta roca está lisa: no hay resultados para ese nombre.", false);
+      mostrarEstado("Ups, no hay resultados para esta busqueda.", false);
       return;
     }
     pintarJSON(datos);
