@@ -27,7 +27,8 @@ const TABS = [
   { key: "saga", label: "Sagas", table: "saga", select: "*", searchLabel: "Buscar saga por nombre" },
   { key: "edicion", label: "Ediciones", table: "edicion", select: "*", searchLabel: "Buscar edición por nombre" },
   { key: "equipo", label: "Equipos", table: "equipo", select: "*", searchLabel: "Buscar equipo por nombre" },
-  { key: "habilidad", label: "Habilidades", table: "habilidad", select: "*", searchLabel: "Buscar habilidad por nombre" }
+  { key: "habilidad", label: "Habilidades", table: "habilidad", select: "*", searchLabel: "Buscar habilidad por nombre" },
+  { key: "clase", label: "Clase", table: "clase", select: "*", searchLabel: "Buscar habilidad por nombre" }
 ];
 
 let currentTab = TABS[0];
