@@ -154,6 +154,9 @@ async function buscar() {
 /* ------------------------------------------------------------
    Renderizador en formato JSON limpio
    ------------------------------------------------------------ */
+/* ------------------------------------------------------------
+   Renderizador en formato JSON con colores (Syntax Highlighting)
+   ------------------------------------------------------------ */
 function pintarJSON(datos) {
   gridEl.innerHTML = "";
   if (!datos.length) {
@@ -161,21 +164,41 @@ function pintarJSON(datos) {
     return;
   }
 
-  // Creamos la estructura <pre><code> para renderizar el JSON estético en pantalla
+  // 1. Convertimos el objeto a cadena JSON formateada
+  let jsonString = JSON.stringify(datos, null, 2);
+
+  // 2. Escapamos caracteres HTML para evitar conflictos
+  jsonString = jsonString
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  // 3. Expresión regular para identificar claves, strings, números, etc.
+  const regexJSON = /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g;
+
+  // 4. Aplicamos los spans con clases según el tipo de dato encontrado
+  const jsonColoreado = jsonString.replace(regexJSON, function (match) {
+    let cls = "json-number";
+    if (/^"/.test(match)) {
+      if (/:$/.test(match)) {
+        cls = "json-key";
+      } else {
+        cls = "json-string";
+      }
+    } else if (/true|false/.test(match)) {
+      cls = "json-boolean";
+    } else if (/null/.test(match)) {
+      cls = "json-null";
+    }
+    return `<span class="${cls}">${match}</span>`;
+  });
+
+  // 5. Creamos el contenedor <pre> y metemos el código coloreado
   const pre = document.createElement("pre");
-  pre.style.textAlign = "left";
-  pre.style.background = "#1e1e1e";
-  pre.style.color = "#a9dc76";
-  pre.style.padding = "20px";
-  pre.style.borderRadius = "8px";
-  pre.style.overflowX = "auto";
-  pre.style.fontSize = "14px";
-  pre.style.margin = "0";
-  pre.style.width = "100%";
-  pre.style.boxSizing = "border-box";
+  pre.className = "json-pre-container"; // Usamos una clase CSS externa
   
   const code = document.createElement("code");
-  code.textContent = JSON.stringify(datos, null, 2); // Formatea con 2 espacios de indentación
+  code.innerHTML = jsonColoreado; // Insertamos el HTML con los spans
   
   pre.appendChild(code);
   gridEl.appendChild(pre);
