@@ -40,7 +40,7 @@ Para mantener el enfoque en las figuras principales, la API **solo incluye**:
 ## 🛠️ Tecnologías utilizadas
 
 * **Base de Datos:** [Supabase](https://supabase.com/)
-* *[Puedes agregar aquí tu framework de frontend o backend, por ejemplo: Node.js, Express, React, etc.]*
+* *HTML, css y JavaScript*
 
 ---
 
